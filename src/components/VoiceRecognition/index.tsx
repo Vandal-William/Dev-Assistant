@@ -22,14 +22,14 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
   ...props
 }) => {
   const {listening, transcript} = useSpeechRecognition() as ExtendedSpeechRecognition;
-  const [request, setRequest] = useState<string>('');
+  const [response, setResponse] = useState<string>('');
 
   useEffect(() => {
     if (listening) {
       onStartListening();
     } else {
       onStopListening();
-      setRequest(voiceCommands(transcript))
+      setResponse(voiceCommands(transcript))
     }
   }, [listening, transcript, onStartListening, onStopListening]);
 
@@ -43,7 +43,7 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
 
   return (
     <>
-      <SpeechBubble position={[0, 0, 0]} text={request} />
+      <SpeechBubble position={[0, 0, 0]} text={response} />
       <mesh onClick={handleButtonClick} position={[0.3, -0.6, 0]} {...props}>
         <circleGeometry args={[0.1, 32]} />
         <meshStandardMaterial color={listening ? 'green' : 'red'} />
