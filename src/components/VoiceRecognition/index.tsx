@@ -1,8 +1,10 @@
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition, SpeechRecognitionOptions } from 'react-speech-recognition';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MeshProps } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
+import voiceCommands from '../../selectors/voiceComands';
+import SpeechBubble from '../SpeechBubble';
 
 interface ExtendedSpeechRecognition extends ReturnType<typeof useSpeechRecognition> {
   startListening: (options?: SpeechRecognitionOptions) => void;
@@ -19,15 +21,17 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
   onStopListening,
   ...props
 }) => {
-  const {listening} = useSpeechRecognition() as ExtendedSpeechRecognition;
+  const {listening, transcript} = useSpeechRecognition() as ExtendedSpeechRecognition;
+  const [request, setRequest] = useState<string>('');
 
   useEffect(() => {
     if (listening) {
       onStartListening();
     } else {
       onStopListening();
+      setRequest(voiceCommands(transcript))
     }
-  }, [listening, onStartListening, onStopListening]);
+  }, [listening, transcript, onStartListening, onStopListening]);
 
   const handleButtonClick = () => {
     if (listening) {
@@ -38,21 +42,24 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
   };
 
   return (
-    <mesh onClick={handleButtonClick} position={[0.3, -0.6, 0]} {...props}>
-      <circleGeometry args={[0.1, 32]} />
-      <meshStandardMaterial color={listening ? 'green' : 'red'} />
-      <Text
-        position={[0, 0, 0.01]}
-        color="black"
-        fontSize={0.05}
-        maxWidth={300}
-        lineHeight={1}
-        letterSpacing={0.02}
-        textAlign="center"
-      >
-        Voice
-      </Text>
-    </mesh>
+    <>
+      <SpeechBubble position={[0, 0, 0]} text={request} />
+      <mesh onClick={handleButtonClick} position={[0.3, -0.6, 0]} {...props}>
+        <circleGeometry args={[0.1, 32]} />
+        <meshStandardMaterial color={listening ? 'green' : 'red'} />
+        <Text
+          position={[0, 0, 0.01]}
+          color="black"
+          fontSize={0.05}
+          maxWidth={300}
+          lineHeight={1}
+          letterSpacing={0.02}
+          textAlign="center"
+        >
+          Voice
+        </Text>
+      </mesh>
+    </>
   );
 };
 

@@ -4,7 +4,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM, VRMLoaderPlugin } from '@pixiv/three-vrm';
 import Idle from './Idle.vrm';
 
-import SpeechBubble from '../SpeechBubble';
 import LoadingBar from '../LoadingCharacter';
 import VoiceRecognition from '../VoiceRecognition';
 
@@ -52,8 +51,6 @@ function VrmLoader() {
 
 function App() {
 
-  const [text, setText] = useState('');
-
   const canvasStyle = {
     width: '100vw',
     height: '100vh',
@@ -66,21 +63,6 @@ function App() {
     position: [0, 0, 3] as [number, number, number],
   };
 
-  useEffect(() => {
-  
-    const firstTimeoutId = setTimeout(() => {
-      setText('Bonjour !');
-
-      const secondTimeoutId = setTimeout(() => {
-        setText('Tapez "/commande" pour afficher toute les commandes.');
-      }, 2000);
-
-      return () => clearTimeout(secondTimeoutId);
-    }, 4000);
-
-    return () => clearTimeout(firstTimeoutId);
-  }, []);
-
   return (
     <>
       <Canvas style={canvasStyle} camera={canvasCameraSettings}>
@@ -88,7 +70,6 @@ function App() {
           onStartListening={() => console.log('Start listening')}
           onStopListening={() => console.log('Stop listening')}
         />
-        <SpeechBubble position={[0, 0, 0]} text={text} />
         <ambientLight intensity={1.5} />
         <VrmLoader />
       </Canvas>
