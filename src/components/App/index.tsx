@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRM, VRMLoaderPlugin } from '@pixiv/three-vrm';
-import Idle from './Idle.vrm';
-
+import model from '../../assets/idle.vrm'
 import LoadingBar from '../LoadingCharacter';
 import VoiceRecognition from '../VoiceRecognition';
 
@@ -21,7 +20,7 @@ function VrmLoader() {
     });
 
     loader.load(
-      Idle,
+      model,
       (gltf) => {
         const vrm = gltf.userData.vrm;
         vrm.scene.rotation.y = Math.PI;

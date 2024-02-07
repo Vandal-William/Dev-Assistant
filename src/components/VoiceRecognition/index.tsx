@@ -29,7 +29,7 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
       onStartListening();
     } else {
       onStopListening();
-      setResponse(voiceCommands(transcript))
+      setResponse(voiceCommands(transcript.toLowerCase()))
     }
   }, [listening, transcript, onStartListening, onStopListening]);
 

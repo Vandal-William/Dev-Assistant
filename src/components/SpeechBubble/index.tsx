@@ -29,6 +29,7 @@ const SpeechBubble: React.FC<SpeechBubbleProps> = ({ position, text }) => {
         position={[0, 1, 0]}
         fontSize={0.03}
         color="white"
+        maxWidth={0.7}
       >
         {text}
       </Text>
