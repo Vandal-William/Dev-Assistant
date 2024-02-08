@@ -5,6 +5,7 @@ import { MeshProps } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import voiceCommands from '../../selectors/voiceComands';
 import SpeechBubble from '../SpeechBubble';
+import { speak } from '../../selectors/speakResponse';
 
 interface ExtendedSpeechRecognition extends ReturnType<typeof useSpeechRecognition> {
   startListening: (options?: SpeechRecognitionOptions) => void;
@@ -22,14 +23,15 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
   ...props
 }) => {
   const {listening, transcript} = useSpeechRecognition() as ExtendedSpeechRecognition;
-  const [response, setResponse] = useState<string>('');
+  const [response, setResponse] = useState<string | undefined>();
 
   useEffect(() => {
     if (listening) {
       onStartListening();
     } else {
       onStopListening();
-      setResponse(voiceCommands(transcript.toLowerCase()))
+      setResponse(voiceCommands(transcript)?.get)
+      speak(voiceCommands(transcript)?.voiceResponse);
     }
   }, [listening, transcript, onStartListening, onStopListening]);
 
@@ -40,6 +42,7 @@ const VoiceRecognition: React.FC<VoiceRecognitionButtonProps & MeshProps> = ({
         SpeechRecognition.startListening();
     }
   };
+
 
   return (
     <>

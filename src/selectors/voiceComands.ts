@@ -1,21 +1,18 @@
 import {calendar, days, agenda} from "./calendar"
+import {responseData} from "../@types/responseData"
 
 export default function voiceCommands (transcript : string){
 
     console.log(transcript)
-    let response = ''
-
-    if (!transcript){
-
-       response = 'Que puis-je faire pour vous ?'
-    }
 
     if (transcript?.toLocaleLowerCase().includes("voir mon agenda")){
       
         if (agenda.length === 0){
-            response = 'Votre agenda est vide !'  
+            responseData.get = 'Votre agenda est vide !'
+            responseData.voiceResponse = 'Votre agenda est vide !'  
         }else {
-            response = 'voici votre agenda'
+            responseData.get = 'voici votre agenda'
+            responseData.voiceResponse = 'voici votre agenda'
         }
     }
 
@@ -29,15 +26,17 @@ export default function voiceCommands (transcript : string){
 
         const heureActuelle = heureString + ':' + minutesString;
 
-        response = `il est ${heureActuelle}`; 
+        responseData.get = `il est ${heureActuelle}`; 
+        responseData.voiceResponse = `il est ${heureActuelle}`;
 
     }
 
     if (days.some(day => transcript?.toLowerCase().includes(day))){ 
 
-        response = calendar(transcript);
+        responseData.get = calendar(transcript);
+        responseData.voiceResponse = calendar(transcript);
     }
 
-    return response
+    return responseData
 
 }

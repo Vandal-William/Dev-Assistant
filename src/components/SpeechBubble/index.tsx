@@ -5,7 +5,7 @@ import { Group} from 'three';
 
 interface SpeechBubbleProps {
   position: [number, number, number];
-  text: string;
+  text: string | undefined;
 }
 
 const SpeechBubble: React.FC<SpeechBubbleProps> = ({ position, text }) => {
