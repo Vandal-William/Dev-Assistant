@@ -1,19 +1,16 @@
-const days = [
-    'lundi','mardi','mercredi','jeudi',
-    'vendredi','samedi','dimanche'
-];
-
-const months = [
-    "janvier", "février", "mars", "avril", "mai", "juin",
-    "juillet", "août", "septembre", "octobre", "novembre", "décembre"
-];
-
-const agenda = [];
+import {calendar, days, agenda} from "./calendar"
 
 export default function voiceCommands (transcript : string){
+
     console.log(transcript)
     let response = ''
-    if (transcript.toLocaleLowerCase().includes("voir mon agenda")){
+
+    if (!transcript){
+
+       response = 'Que puis-je faire pour vous ?'
+    }
+
+    if (transcript?.toLocaleLowerCase().includes("voir mon agenda")){
       
         if (agenda.length === 0){
             response = 'Votre agenda est vide !'  
@@ -22,7 +19,7 @@ export default function voiceCommands (transcript : string){
         }
     }
 
-    if (transcript.toLocaleLowerCase().includes("quelle heure est-il")){
+    if (transcript?.toLocaleLowerCase().includes("quelle heure est-il")){
         const maintenant = new Date();
         const heure = maintenant.getHours();
         const minutes = maintenant.getMinutes();
@@ -36,39 +33,11 @@ export default function voiceCommands (transcript : string){
 
     }
 
-    if (days.some(day => transcript.toLowerCase().includes(day))){ 
-        
-        let day = null;
-        let numberOfDay = null;
-        let month = null;
-        let hour = null;
-        let subject = null;
+    if (days.some(day => transcript?.toLowerCase().includes(day))){ 
 
-        const dayFollowedByNumberRegex = new RegExp(`(${days.join('|')})\\s(\\d+)`, 'i');
-        const matchDayAndNumber = transcript.match(dayFollowedByNumberRegex);
-
-        if (matchDayAndNumber) {
-            day = matchDayAndNumber[1];
-            numberOfDay = matchDayAndNumber[2];
-            month = months.find(month => transcript.toLowerCase().includes(month));
-
-            if (month) {
-                const hourRegex = /\b\d{1,2}h(?:\d{1,2})?\b/;
-                const matchHour = transcript.match(hourRegex);
-
-                if (matchHour) {
-                    hour = matchHour[0];
-                    subject = transcript.substring(transcript.indexOf(hour) + hour.length).trim();
-                }
-            }
-        }
-
-        if(day !== null && numberOfDay !== null && month !== null && hour !== null && subject !== null){
-
-            response = `Votre rendez-vous du ${day} ${numberOfDay} ${month} à ${hour} pour ${subject} a bien été enregistrer`
-        }
-
+        response = calendar(transcript);
     }
 
     return response
+
 }
