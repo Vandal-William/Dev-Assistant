@@ -5,6 +5,7 @@ import { VRM, VRMLoaderPlugin } from '@pixiv/three-vrm';
 import model from '../../assets/idle.vrm'
 import LoadingBar from '../LoadingCharacter';
 import VoiceRecognition from '../VoiceRecognition';
+import FacialRecognition from '../FacialRecognition';
 
 
 function VrmLoader() {
@@ -71,6 +72,7 @@ function App() {
         />
         <ambientLight intensity={1.5} />
         <VrmLoader />
+        <FacialRecognition />
       </Canvas>
     </>
   );
